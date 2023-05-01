@@ -7,19 +7,27 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-func ConventionalCommit() {
+func getRepository(pathToRepository string) *git.Worktree {
 
-	r, err := git.PlainOpen("/home/kaue/projects/personal/backend/clis/flower")
+	repository, err := git.PlainOpen(pathToRepository)
 	if err != nil {
 		log.Fatal("Could not open Git Repo")
 	}
 
-	w, err := r.Worktree()
+	worktree, err := repository.Worktree()
 	if err != nil {
 		log.Fatal("Could not get Work Tree")
 	}
 
-	w.Commit("chore: commit with fixed conventional commit prefix", &git.CommitOptions{})
+	return worktree
+
+}
+
+func ConventionalCommit() {
+
+	worktree := getRepository("/home/kaue/projects/personal/backend/clis/flower")
+
+	worktree.Commit("refactor: separing concerns on git operations", &git.CommitOptions{})
 
 	fmt.Println("Commitado")
 
