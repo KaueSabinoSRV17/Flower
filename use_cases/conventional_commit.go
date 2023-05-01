@@ -51,6 +51,6 @@ func ConventionalCommit(prefix string, message string) {
 
 	worktree.Commit(formatedMessage, &git.CommitOptions{})
 
-	fmt.Println("Commitado")
+	fmt.Println("Sucessfully added a commit!")
 
 }
