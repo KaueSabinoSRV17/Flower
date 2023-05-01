@@ -1,6 +1,5 @@
 /*
 Copyright © 2023 Kauê Sabino Villaça de Almeida kauevillaca2018@gmail.com
-
 */
 package cmd
 
@@ -10,11 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "Flower",
+	Use:   "flow",
 	Short: "A CLI tool to streamline the use of Git Flow and Conventional Commits.",
 	Long: `
   Flower is a CLI tool developers that follow the patterns of Git Flow and Conventional Commits.
@@ -43,5 +40,3 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-
