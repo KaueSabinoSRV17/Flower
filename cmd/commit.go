@@ -20,7 +20,10 @@ var commitCmd = &cobra.Command{
   "fix" for a fix and so on.
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		use_cases.ConventionalCommit()
+		prefix := use_cases.AskCommitPrefix()
+		message := args[0]
+
+		use_cases.ConventionalCommit(prefix, message)
 	},
 }
 
