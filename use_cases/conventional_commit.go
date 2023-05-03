@@ -45,7 +45,7 @@ func AskCommitPrefix() string {
 
 func ConventionalCommit(prefix string, message string) {
 
-	worktree := getRepository("/home/kaue/projects/personal/backend/clis/flower")
+	worktree := getRepository(".")
 
 	formatedMessage := fmt.Sprintf("%s: %s", prefix, message)
 
