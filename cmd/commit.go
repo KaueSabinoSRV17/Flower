@@ -21,7 +21,7 @@ var commitCmd = &cobra.Command{
   `,
 	Run: func(cmd *cobra.Command, args []string) {
 		prefix := use_cases.AskCommitPrefix()
-		message := args[0]
+		message := use_cases.ResolveCommitMessage(args[0])
 
 		use_cases.ConventionalCommit(prefix, message)
 	},

@@ -43,6 +43,20 @@ func AskCommitPrefix() string {
 
 }
 
+func ResolveCommitMessage(possibleCommitMessage string) string {
+	if possibleCommitMessage == "" {
+		err := survey.AskOne(
+			&survey.Input{
+				Message: "What did you do? (Will be the Commit message)",
+			},
+			&possibleCommitMessage)
+		if err != nil {
+			log.Fatal("Could not ask Commit Message")
+		}
+	}
+	return possibleCommitMessage
+}
+
 func ConventionalCommit(prefix string, message string) {
 
 	worktree := getRepository(".")
