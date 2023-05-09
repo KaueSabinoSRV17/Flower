@@ -36,7 +36,7 @@ func AskCommitPrefix() string {
 	)
 
 	if err != nil {
-		log.Fatal("Could not as Commit Prefix")
+		log.Fatal("Could not ask Commit Prefix")
 	}
 
 	return prefix
