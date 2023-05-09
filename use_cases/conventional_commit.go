@@ -43,18 +43,22 @@ func AskCommitPrefix() string {
 
 }
 
-func ResolveCommitMessage(possibleCommitMessage string) string {
-	if possibleCommitMessage == "" {
-		err := survey.AskOne(
-			&survey.Input{
-				Message: "What did you do? (Will be the Commit message)",
-			},
-			&possibleCommitMessage)
-		if err != nil {
-			log.Fatal("Could not ask Commit Message")
-		}
+func ResolveCommitMessage() string {
+
+	var message string
+	err := survey.AskOne(
+		&survey.Input{
+			Message: "What did you do? (Commit Message)",
+		},
+		&message,
+	)
+
+	if err != nil {
+		log.Fatal("Could not ask Commit Message")
 	}
-	return possibleCommitMessage
+
+	return message
+
 }
 
 func ConventionalCommit(prefix string, message string) {
