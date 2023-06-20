@@ -19,7 +19,7 @@ universal_binaries:
 
 brews:
   -
-    name: Flower
+    name: flower
     homepage: "https://github.com/KaueSabinoSRV17/Flower"
     tap:
       owner: KaueSabinoSRV17
