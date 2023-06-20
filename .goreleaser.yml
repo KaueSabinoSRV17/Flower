@@ -1,0 +1,32 @@
+builds:
+  - binary: flow
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -mod=vendor
+
+release:
+  prerelease: auto
+
+universal_binaries:
+  - replace: true
+
+brews:
+  -
+    name: Flower
+    homepage: "https://github.com/KaueSabinoSRV17/Flower"
+    tap:
+      owner: KaueSabinoSRV17
+      name: homebrew-flower
+    commit_author:
+      name: KaueSabinoSRV17
+      email: kauevillaca2018@gmail.com
+
+checksum:
+  name_template: 'checksums.txt'
