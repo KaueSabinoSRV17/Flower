@@ -20,8 +20,16 @@ var commitCmd = &cobra.Command{
   "fix" for a fix and so on.
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		prefix := use_cases.AskCommitPrefix()
+		repo := use_cases.GetRepository(".")
 		var message string
+
+		unstagedFiles := use_cases.GetUnstaggedFiles()
+		if len(unstagedFiles) > 0 {
+			filesToStage := use_cases.AskWhatFilesToAddForStaging(unstagedFiles)
+			use_cases.StageFiles(filesToStage, repo)
+		}
+
+		prefix := use_cases.AskCommitPrefix()
 
 		if len(args) == 0 {
 			message = use_cases.ResolveCommitMessage()
