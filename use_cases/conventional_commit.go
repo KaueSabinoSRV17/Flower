@@ -30,7 +30,7 @@ func AskCommitPrefix() string {
 	err := survey.AskOne(
 		&survey.Select{
 			Message: "Select a Prefix for the commit:",
-			Options: []string{"chore", "feat", "fix", "refactor"},
+			Options: []string{"chore", "feat", "fix", "refactor", "tests", "docs"},
 		},
 		&prefix,
 	)
