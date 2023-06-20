@@ -26,7 +26,7 @@ var commitCmd = &cobra.Command{
 		unstagedFiles := use_cases.GetUnstaggedFiles()
 		if len(unstagedFiles) > 0 {
 			filesToStage := use_cases.AskWhatFilesToAddForStaging(unstagedFiles)
-			use_cases.StageFiles(filesToStage, repo)
+			go use_cases.StageFiles(filesToStage, repo)
 		}
 
 		prefix := use_cases.AskCommitPrefix()
