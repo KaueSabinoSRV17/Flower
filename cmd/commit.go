@@ -23,7 +23,7 @@ var commitCmd = &cobra.Command{
 		repo := use_cases.GetRepository(".")
 		var message string
 
-		unstagedFiles := use_cases.GetUnstaggedFiles()
+		unstagedFiles := use_cases.GetUnstaggedFiles(repo)
 		if len(unstagedFiles) > 0 {
 			filesToStage := use_cases.AskWhatFilesToAddForStaging(unstagedFiles)
 			go use_cases.StageFiles(filesToStage, repo)
@@ -37,7 +37,7 @@ var commitCmd = &cobra.Command{
 			message = args[0]
 		}
 
-		use_cases.ConventionalCommit(prefix, message)
+		use_cases.ConventionalCommit(prefix, message, repo)
 	},
 }
 

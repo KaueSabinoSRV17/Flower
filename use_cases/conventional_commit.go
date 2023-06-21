@@ -24,9 +24,8 @@ func GetRepository(pathToRepository string) *git.Worktree {
 
 }
 
-func GetUnstaggedFiles() []string {
+func GetUnstaggedFiles(worktree *git.Worktree) []string {
 
-	worktree := GetRepository(".")
 	status, err := worktree.Status()
 	if err != nil {
 		log.Fatal("Could not get Git Status")
@@ -34,10 +33,9 @@ func GetUnstaggedFiles() []string {
 
 	var modifiedOrUntrackedFiles []string
 	for file, s := range status {
-		if s.Staging == git.Unmodified && s.Worktree == git.Unmodified {
-			continue
+		if s.Worktree == git.Modified || s.Worktree == git.Untracked {
+			modifiedOrUntrackedFiles = append(modifiedOrUntrackedFiles, file)
 		}
-		modifiedOrUntrackedFiles = append(modifiedOrUntrackedFiles, file)
 	}
 
 	return modifiedOrUntrackedFiles
@@ -103,14 +101,8 @@ func ResolveCommitMessage() string {
 
 }
 
-func ConventionalCommit(prefix string, message string) {
-
-	worktree := GetRepository(".")
-
+func ConventionalCommit(prefix string, message string, worktree *git.Worktree) {
 	formatedMessage := fmt.Sprintf("%s: %s", prefix, message)
-
 	worktree.Commit(formatedMessage, &git.CommitOptions{})
-
 	fmt.Println("Sucessfully added a commit!")
-
 }
