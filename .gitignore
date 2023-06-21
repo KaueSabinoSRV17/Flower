@@ -21,3 +21,6 @@
 go.work
 vendor
 dist
+*.tfvars
+*/tmp/**
+.terraform*
