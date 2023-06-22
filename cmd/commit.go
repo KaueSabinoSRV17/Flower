@@ -4,7 +4,9 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/KaueSabinoSRV17/Flower/use_cases"
+	"github.com/KaueSabinoSRV17/Flower/internal/commit"
+	"github.com/KaueSabinoSRV17/Flower/internal/repo"
+	"github.com/KaueSabinoSRV17/Flower/internal/staging"
 
 	"github.com/spf13/cobra"
 )
@@ -20,24 +22,25 @@ var commitCmd = &cobra.Command{
   "fix" for a fix and so on.
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		repo := use_cases.GetRepository(".")
+		repo := repo.GetRepository(".")
 		var message string
 
 		unstagedFiles := use_cases.GetUnstaggedFiles(repo)
+		unstagedFiles := staging.GetUnstaggedFiles(repo)
 		if len(unstagedFiles) > 0 {
-			filesToStage := use_cases.AskWhatFilesToAddForStaging(unstagedFiles)
-			go use_cases.StageFiles(filesToStage, repo)
+			filesToStage := staging.AskWhatFilesToAddForStaging(unstagedFiles)
+			go staging.StageFiles(filesToStage, repo)
 		}
 
-		prefix := use_cases.AskCommitPrefix()
+		prefix := commit.AskCommitPrefix()
 
 		if len(args) == 0 {
-			message = use_cases.ResolveCommitMessage()
+			message = commit.ResolveCommitMessage()
 		} else {
 			message = args[0]
 		}
 
-		use_cases.ConventionalCommit(prefix, message, repo)
+		commit.ConventionalCommit(prefix, message, repo)
 	},
 }
 
