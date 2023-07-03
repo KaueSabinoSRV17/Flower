@@ -25,7 +25,6 @@ var commitCmd = &cobra.Command{
 		repo := repo.GetRepository(".")
 		var message string
 
-		unstagedFiles := use_cases.GetUnstaggedFiles(repo)
 		unstagedFiles := staging.GetUnstaggedFiles(repo)
 		if len(unstagedFiles) > 0 {
 			filesToStage := staging.AskWhatFilesToAddForStaging(unstagedFiles)

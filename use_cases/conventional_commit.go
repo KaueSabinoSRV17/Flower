@@ -45,7 +45,7 @@ func GetUnstaggedFiles(worktree *git.Worktree) []string {
 func AskWhatFilesToAddForStaging(files []string) []string {
 	var filesToAdd []string
 	prompt := &survey.MultiSelect{
-		Message: "Chose the files to stage",
+    Message: "Chose the files to stage:",
 		Options: files,
 	}
 	err := survey.AskOne(prompt, &filesToAdd)
@@ -70,7 +70,7 @@ func AskCommitPrefix() string {
 	err := survey.AskOne(
 		&survey.Select{
 			Message: "Select a Prefix for the commit:",
-			Options: []string{"chore", "feat", "fix", "refactor", "tests", "docs"},
+			Options: []string{"chore", "feat", "fix", "refactor", "tests", "docs", "build"},
 		},
 		&prefix,
 	)
@@ -88,7 +88,7 @@ func ResolveCommitMessage() string {
 	var message string
 	err := survey.AskOne(
 		&survey.Input{
-			Message: "What did you do? (Commit Message)",
+      Message: "What did you do? (Commit Message):",
 		},
 		&message,
 	)
