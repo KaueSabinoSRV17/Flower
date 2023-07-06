@@ -22,13 +22,13 @@ var commitCmd = &cobra.Command{
   "fix" for a fix and so on.
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		repo := repo.GetRepository(".")
+		repo := repo.GetRepository()
 		var message string
 
 		unstagedFiles := staging.GetUnstaggedFiles(repo)
 		if len(unstagedFiles) > 0 {
 			filesToStage := staging.AskWhatFilesToAddForStaging(unstagedFiles)
-			go staging.StageFiles(filesToStage, repo)
+			staging.StageFiles(repo, filesToStage)
 		}
 
 		prefix := commit.AskCommitPrefix()
@@ -39,7 +39,7 @@ var commitCmd = &cobra.Command{
 			message = args[0]
 		}
 
-		commit.ConventionalCommit(prefix, message, repo)
+		commit.ConventionalCommit(repo, prefix, message)
 	},
 }
 

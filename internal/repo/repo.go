@@ -2,20 +2,17 @@ package repo
 
 import (
 	"log"
-
-	"github.com/go-git/go-git/v5"
+	"os/exec"
+	"strings"
 )
 
-func GetRepository(pathToRepository string) *git.Worktree {
-	repository, err := git.PlainOpen(pathToRepository)
+func GetRepository() string {
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	output, err := cmd.Output()
 	if err != nil {
-		log.Fatal("Could not open Git Repo")
+		log.Fatal("Could not get Git Dir")
 	}
-
-	worktree, err := repository.Worktree()
-	if err != nil {
-		log.Fatal("Could not get Work Tree")
-	}
-
-	return worktree
+	gitDir := string(output)
+	formatedDirString := strings.Replace(gitDir, "\n", "", 1)
+	return formatedDirString
 }

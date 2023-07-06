@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/go-git/go-git/v5"
+	"github.com/KaueSabinoSRV17/Flower/internal/command"
 )
 
 func AskCommitPrefix() string {
@@ -41,8 +41,12 @@ func ResolveCommitMessage() string {
 	return message
 }
 
-func ConventionalCommit(prefix string, message string, worktree *git.Worktree) {
-	formatedMessage := fmt.Sprintf("%s: %s", prefix, message)
-	worktree.Commit(formatedMessage, &git.CommitOptions{})
+func ConventionalCommit(gitDirectory, prefix, message string) {
+	formatedMessage := fmt.Sprintf(`"%s: %s"`, prefix, message)
+	cmd := command.GitCommand(gitDirectory, "commit", "-m", formatedMessage)
+	_, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("Could not get Commit\n\t%v", err.Error())
+	}
 	fmt.Println("Sucessfully added a commit!")
 }

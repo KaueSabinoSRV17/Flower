@@ -2,25 +2,68 @@ package staging
 
 import (
 	"log"
+	"regexp"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/go-git/go-git/v5"
+	"github.com/KaueSabinoSRV17/Flower/internal/command"
 )
 
-func GetUnstaggedFiles(worktree *git.Worktree) []string {
-	status, err := worktree.Status()
-	if err != nil {
-		log.Fatal("Could not get Git Status")
-	}
-
-	var modifiedOrUntrackedFiles []string
-	for file, s := range status {
-		if s.Worktree == git.Modified || s.Worktree == git.Untracked {
-			modifiedOrUntrackedFiles = append(modifiedOrUntrackedFiles, file)
+func GetUnstaggedFiles(dir string) []string {
+	files := GetAllFilesFromStatus(dir)
+	var unstagedFiles []string
+	for _, file := range files {
+		if file == "" {
+			continue // There is always an empty string in the list. If we reached and dont continue the loop, we'll have some problems
+		}
+		status, fileName := ExtractStatusAndFile(file)
+		if IsUnstaged(status) {
+			unstagedFiles = append(unstagedFiles, fileName)
 		}
 	}
+	return unstagedFiles
+}
 
-	return modifiedOrUntrackedFiles
+func GetAllFilesFromStatus(dir string) []string {
+	cmd := command.GitCommand(dir, "status", "-s")
+	output, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("Could not get Status %v\n\t", err.Error())
+	}
+	files := string(output)
+	arrayOfFiles := strings.Split(files, "\n")
+	return arrayOfFiles
+}
+
+func ExtractStatusAndFile(stageEntry string) (status, fileName string) {
+	regex := regexp.MustCompile("([A-Z ?]+) (.*)")
+	matches := regex.FindStringSubmatch(stageEntry)
+	if len(matches) >= 3 {
+		status = matches[1]
+		fileName = matches[2]
+	} else {
+		log.Fatal("Could not Extract Status and Files")
+	}
+	return
+}
+
+func IsUnstaged(status string) bool {
+	alreadyStagedStatus := []string{"A", "D  "}
+	for _, statusName := range alreadyStagedStatus {
+		if status == statusName {
+			return false
+		}
+	}
+	return true
+}
+
+func StageFiles(dir string, files []string) {
+	args := append([]string{"add"}, files...)
+	cmd := command.GitCommand(dir, args...)
+	_, err := cmd.Output()
+	if err != nil {
+		log.Fatal("Could not add Files")
+	}
 }
 
 func AskWhatFilesToAddForStaging(files []string) []string {
@@ -34,13 +77,4 @@ func AskWhatFilesToAddForStaging(files []string) []string {
 		log.Fatal("Could not Ask Files to Stage")
 	}
 	return filesToAdd
-}
-
-func StageFiles(files []string, worktree *git.Worktree) {
-	for _, file := range files {
-		_, err := worktree.Add(file)
-		if err != nil {
-			log.Fatal("Could not add " + file + " file")
-		}
-	}
 }
