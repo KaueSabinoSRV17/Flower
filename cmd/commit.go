@@ -4,7 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
+
 	"github.com/KaueSabinoSRV17/Flower/internal/commit"
+	"github.com/KaueSabinoSRV17/Flower/internal/push"
 	"github.com/KaueSabinoSRV17/Flower/internal/repo"
 	"github.com/KaueSabinoSRV17/Flower/internal/staging"
 
@@ -22,6 +25,10 @@ var commitCmd = &cobra.Command{
   "fix" for a fix and so on.
   `,
 	Run: func(cmd *cobra.Command, args []string) {
+		pushAfterCommit, err := cmd.Flags().GetBool("push")
+		if err != nil {
+			log.Fatalf("Could not get --push flag value: \n\t%v", err.Error())
+		}
 		repo := repo.GetRepository()
 		var message string
 
@@ -40,11 +47,15 @@ var commitCmd = &cobra.Command{
 		}
 
 		commit.ConventionalCommit(repo, prefix, message)
+		if pushAfterCommit {
+			push.PushChanges(repo)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(commitCmd)
+	commitCmd.Flags().BoolP("push", "p", false, "Push changes after commit is completed")
 
 	// Here you will define your flags and configuration settings.
 
