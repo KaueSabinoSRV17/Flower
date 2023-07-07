@@ -42,7 +42,7 @@ func ResolveCommitMessage() string {
 }
 
 func ConventionalCommit(gitDirectory, prefix, message string) {
-	formatedMessage := fmt.Sprintf(`"%s: %s"`, prefix, message)
+	formatedMessage := fmt.Sprintf(`%s: %s`, prefix, message)
 	cmd := command.GitCommand(gitDirectory, "commit", "-m", formatedMessage)
 	_, err := cmd.Output()
 	if err != nil {
