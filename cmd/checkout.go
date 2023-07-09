@@ -18,7 +18,12 @@ Choose a new branch to work with
 		repo := repo.GetRepository()
 		branches := branch.ListAllBranches(repo)
 		destinationBranch := branch.AskWhatBranchToCheckoutTo(branches)
-		branch.CheckoutToBranch(repo, destinationBranch)
+		if destinationBranch == branch.CreateNewBranchMessage {
+			newBranchName := branch.AskNewBranchName()
+			branch.CreateNewBranch(repo, newBranchName)
+		} else {
+			branch.CheckoutToBranch(repo, destinationBranch)
+		}
 	},
 }
 

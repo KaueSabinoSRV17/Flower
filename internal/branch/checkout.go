@@ -44,12 +44,15 @@ func ExtractBranchOutOfOutputLine(line string) string {
 	return branch
 }
 
+const CreateNewBranchMessage = "+ Create New Branch"
+
 func AskWhatBranchToCheckoutTo(listOfBranches []string) string {
 	var destinationBranch string
+	options := append(listOfBranches, CreateNewBranchMessage)
 	err := survey.AskOne(
 		&survey.Select{
 			Message: "Select destination branch",
-			Options: listOfBranches,
+			Options: options,
 		},
 		&destinationBranch,
 	)
@@ -57,8 +60,26 @@ func AskWhatBranchToCheckoutTo(listOfBranches []string) string {
 	return destinationBranch
 }
 
+func AskNewBranchName() string {
+	var newBranchName string
+	err := survey.AskOne(
+		&survey.Input{
+			Message: "Choose new branch name:",
+		},
+		&newBranchName,
+	)
+	catch.HandleError("Could not ask new branch name", err)
+	return newBranchName
+}
+
 func CheckoutToBranch(repo, branch string) {
 	cmd := command.GitCommand(repo, "checkout", branch)
 	_, err := cmd.Output()
 	catch.HandleError("Could not checkout to the %v branch", err)
+}
+
+func CreateNewBranch(repo, branchName string) {
+	cmd := command.GitCommand(repo, "checkout", "-b", branchName)
+	_, err := cmd.Output()
+	catch.HandleError("Could create new %v branch", err)
 }
