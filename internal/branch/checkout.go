@@ -1,6 +1,7 @@
 package branch
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -75,11 +76,11 @@ func AskNewBranchName() string {
 func CheckoutToBranch(repo, branch string) {
 	cmd := command.GitCommand(repo, "checkout", branch)
 	_, err := cmd.Output()
-	catch.HandleError("Could not checkout to the %v branch", err)
+	catch.HandleError(fmt.Sprintf("Could not checkout to the %v branch", branch), err)
 }
 
 func CreateNewBranch(repo, branchName string) {
 	cmd := command.GitCommand(repo, "checkout", "-b", branchName)
 	_, err := cmd.Output()
-	catch.HandleError("Could create new %v branch", err)
+	catch.HandleError("Could create not new branch", err)
 }
