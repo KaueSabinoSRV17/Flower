@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"github.com/KaueSabinoSRV17/Flower/internal/branch"
-	"github.com/KaueSabinoSRV17/Flower/internal/command"
 	"github.com/KaueSabinoSRV17/Flower/internal/feature"
 	"github.com/KaueSabinoSRV17/Flower/internal/repo"
+	"github.com/KaueSabinoSRV17/Flower/internal/staging"
 	"github.com/spf13/cobra"
 )
 
@@ -21,25 +21,30 @@ var featCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var featureName string
 		repo := repo.GetRepository()
-		if len(args) > 0 {
-			featureName = args[0]
-		} else {
-			featureName = feature.AskNewFeatureName()
-		}
 
 		cleanWorkTree := feature.CheckIfWorktreeIsClean(repo)
 		if !cleanWorkTree {
 			stashChages := feature.AskToStashUncommitedChanges()
 			if stashChages {
-				command.GitCommand(repo, "stash")
+				staging.StashChanges(repo)
+				createNewFeatureBranch(args, featureName, repo)
 			} else {
 				return
 			}
 		} else {
-			branch.CheckoutToBranch(repo, "dev")
-			branch.CreateNewBranch(repo, featureName)
+			createNewFeatureBranch(args, featureName, repo)
 		}
 	},
+}
+
+func createNewFeatureBranch(args []string, featureName, repo string) {
+	if len(args) > 0 {
+		featureName = args[0]
+	} else {
+		featureName = feature.AskNewFeatureName()
+	}
+	branch.CheckoutToBranch(repo, "dev")
+	branch.CreateNewBranch(repo, featureName)
 }
 
 func init() {

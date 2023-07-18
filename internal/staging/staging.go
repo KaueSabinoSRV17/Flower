@@ -71,6 +71,14 @@ func StageFiles(dir string, files []string) {
 	}
 }
 
+func StashChanges(dir string) {
+	cmd := command.GitCommand(dir, "stash")
+	_, err := cmd.Output()
+	if err != nil {
+		log.Fatal("Could not stash changes")
+	}
+}
+
 func AskWhatFilesToAddForStaging(files []string) []string {
 	var filesToAdd []string
 	prompt := &survey.MultiSelect{

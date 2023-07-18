@@ -32,7 +32,7 @@ func CheckIfWorktreeIsClean(repo string) bool {
 }
 
 func AskToStashUncommitedChanges() bool {
-	var stashChanges bool 
+	var stashChanges bool
 	err := survey.AskOne(
 		&survey.Confirm{
 			Message: "You have uncommited changes, so you cannot checkout to a new branch. Do you want to stash your changes?",
@@ -60,10 +60,10 @@ func AskNewFeatureName() string {
 
 func FormatFeatureName(featureDescription string) string {
 	lowerCased := strings.ToLower(featureDescription)
-	spacesReplacedByUnderlines := strings.Replace(lowerCased, " ", "_", 1)
-	noAccents := RemoveAccents(spacesReplacedByUnderlines)
+	noAccents := RemoveAccents(lowerCased)
 	noSpecialChars := RemoveSpecialChars(noAccents)
-	fullResult := fmt.Sprintf("feature/%v", noSpecialChars)
+	spacesReplacedByUnderlines := strings.Replace(noSpecialChars, " ", "_", -1)
+	fullResult := fmt.Sprintf("feature/%v", spacesReplacedByUnderlines)
 	return fullResult
 }
 
