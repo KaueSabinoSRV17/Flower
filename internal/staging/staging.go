@@ -57,12 +57,25 @@ func IsUnstaged(status string) bool {
 	return true
 }
 
+func IsModified(status string) bool {
+	modifiedStatus := " M"
+	return status == modifiedStatus
+}
+
 func StageFiles(dir string, files []string) {
 	args := append([]string{"add"}, files...)
 	cmd := command.GitCommand(dir, args...)
 	_, err := cmd.Output()
 	if err != nil {
 		log.Fatal("Could not add Files")
+	}
+}
+
+func StashChanges(dir string) {
+	cmd := command.GitCommand(dir, "stash")
+	_, err := cmd.Output()
+	if err != nil {
+		log.Fatal("Could not stash changes")
 	}
 }
 

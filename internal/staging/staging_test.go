@@ -1,9 +1,8 @@
-package staging 
+package staging
 
 import (
 	"fmt"
 	"testing"
-
 )
 
 var fileExamples = map[string]string{
@@ -38,5 +37,12 @@ func TestIsUnstaged(t *testing.T) {
 	statusEntry := fmt.Sprintf("D  ")
 	if IsUnstaged(statusEntry) {
 		t.Error("Should not label a staged file as an unstaged one")
+	}
+}
+
+func TestIsModified(t *testing.T) {
+	statusEntry := " M"
+	if IsModified(statusEntry) {
+		t.Error("Should not label an added file as a modified one")
 	}
 }
