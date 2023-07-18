@@ -57,6 +57,11 @@ func IsUnstaged(status string) bool {
 	return true
 }
 
+func IsModified(status string) bool {
+	modifiedStatus := " M"
+	return status == modifiedStatus
+}
+
 func StageFiles(dir string, files []string) {
 	args := append([]string{"add"}, files...)
 	cmd := command.GitCommand(dir, args...)
