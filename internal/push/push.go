@@ -22,5 +22,5 @@ func PushChanges(gitDirectory string) {
 	cmd := command.GitCommand(gitDirectory, "push", "origin", currentBranch)
 	_, err := cmd.Output()
 	catch.HandleError("Could not Push Changes", err)
-	fmt.Printf("Pushed changes to the %v branch!", currentBranch)
+	fmt.Printf("Pushed changes to the %v branch!\n", currentBranch)
 }
